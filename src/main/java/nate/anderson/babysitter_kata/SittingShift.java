@@ -12,7 +12,8 @@ public class SittingShift {
 	}
 	
 	public void setShiftStartTime(String shiftStartTime) {
-		this.shiftStartTime = LocalTime.of(5, 0);
+		String[] startTimeConverter = shiftStartTime.split(":");
+		this.shiftStartTime = LocalTime.of(Integer.parseInt(startTimeConverter[0]), Integer.parseInt(startTimeConverter[1]));
 	}
 	
 	public LocalTime getShiftEndTime() {
@@ -20,8 +21,8 @@ public class SittingShift {
 	}
 	
 	public void setShiftEndTime(String shiftEndTime) {
-		this.shiftEndTime = LocalTime.of(3, 0);
-		
+		String[] endTimeConverter = shiftEndTime.split(":");
+		this.shiftEndTime = LocalTime.of(Integer.parseInt(endTimeConverter[0]), Integer.parseInt(endTimeConverter[1]));
 	}
 	
 }
