@@ -5,9 +5,17 @@ import java.time.format.DateTimeFormatter;
 
 public class IOController {
 	
+	private final LocalTime EARLIEST_START = LocalTime.of(17, 0);
+	private final LocalTime LATEST_FINISH = LocalTime.of(4, 0);
+	
 	public LocalTime handleStartTime(String userInput) {
 		LocalTime formattedTime = twentyFourHourConverter(userInput);
-		return formattedTime;
+		if (startTimeIsValid(formattedTime)) {
+			return formattedTime;			
+		}
+		else {
+			return null;
+		}
 	}
 		
 	private LocalTime twentyFourHourConverter(String shiftTime) {
@@ -18,4 +26,14 @@ public class IOController {
 		LocalTime formattedTime = LocalTime.parse(shiftTime24HourFormat.format(twelveHourTime));
 		return formattedTime;
 	}
+	
+	private boolean startTimeIsValid(LocalTime shiftStartTime) {
+		if (shiftStartTime.equals(EARLIEST_START) || shiftStartTime.isAfter(EARLIEST_START)) {
+			return true;			
+		}
+		else {
+			return false;
+		}
+	}
 }
+//&& (shiftTime.isBefore(LATEST_FINISH) || shiftTime.equals(LATEST_FINISH))) {
