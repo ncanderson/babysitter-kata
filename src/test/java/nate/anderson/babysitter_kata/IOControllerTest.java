@@ -27,4 +27,11 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
 	}
 	
+	@Test
+	public void handleStartTimeChecksThatStartTimeIsValid() {
+		String userInput = "03:00 PM";
+		testShift.setShiftStartTime(ioController.handleStartTime(userInput));
+		Assert.assertNull(testShift.getShiftStartTime());
+	}
+
 }
