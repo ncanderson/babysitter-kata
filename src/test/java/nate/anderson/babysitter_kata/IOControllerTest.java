@@ -23,15 +23,47 @@ public class IOControllerTest {
 	@Test
 	public void ioControllerTakesAStringAndFormatsForShiftObject() {
 		String userInput = "05:00 PM";
-		testShift.setShiftStartTime(ioController.handleStartTime(userInput));
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
 		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
 	}
 	
 	@Test
-	public void handleStartTimeChecksThatStartTimeIsValid() {
+	public void ioControllerHandlesLowerCaseTimeMarker() {
+		String userInput = "05:00 pm";
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
+		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void handleTimeChecksThatEarlierTimeIsValid() {
 		String userInput = "03:00 PM";
-		testShift.setShiftStartTime(ioController.handleStartTime(userInput));
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
 		Assert.assertNull(testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void handleTimeChecksThatLaterTimeIsValid() {
+		String userInput = "05:00 AM";
+		testShift.setShiftEndTime(ioController.handleTime(userInput));
+		Assert.assertNull(testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void midnightIsAValidValueForStartAndFinish() {
+		String userInput = "12:00 AM";
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
+		testShift.setShiftEndTime(ioController.handleTime(userInput));
+		Assert.assertEquals(LocalTime.of(0, 0), testShift.getShiftStartTime());
+		Assert.assertEquals(LocalTime.of(0, 0), testShift.getShiftEndTime());
+	}
+	
+	@Test
+	public void noonIsInvalidForAnything() {
+		String userInput = "12:00 PM";
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
+		testShift.setShiftEndTime(ioController.handleTime(userInput));
+		Assert.assertNull(testShift.getShiftStartTime());
+		Assert.assertNull(testShift.getShiftEndTime());
 	}
 
 }

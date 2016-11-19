@@ -22,10 +22,7 @@ public class SittingShift {
 	
 	public void setShiftEndTime(LocalTime shiftEndTime) {
 		this.shiftEndTime = shiftEndTime;
-//		LocalTime endTime = twentyFourHourConverter(shiftEndTime);
-//		if (endTime.equals(LATEST_FINISH) || endTime.isBefore(LATEST_FINISH)) {
-//			this.shiftEndTime = endTime;			
-//		}
+
 	}
 	
 
