@@ -58,6 +58,18 @@ public class IOControllerTest {
 	}
 	
 	@Test
+	public void fivePMIsAValidTime() {
+		testShift.setShiftStartTime(ioController.handleTime("05:00 PM"));
+		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void fourAMIsAValidTime() {
+		testShift.setShiftEndTime(ioController.handleTime("04:00 AM"));
+		Assert.assertEquals(LocalTime.of(4, 0), testShift.getShiftEndTime());
+	}
+	
+	@Test
 	public void noonIsInvalidForAnything() {
 		String userInput = "12:00 PM";
 		testShift.setShiftStartTime(ioController.handleTime(userInput));
