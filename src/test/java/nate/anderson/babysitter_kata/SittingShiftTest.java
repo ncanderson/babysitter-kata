@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import nate.anderson.babysitter_kata.model.SittingShift;
+
 public class SittingShiftTest {
 	
 	SittingShift testShift;
@@ -37,7 +39,7 @@ public class SittingShiftTest {
 		Assert.assertEquals(testShift.getShiftStartTime(), testStartTime);
 	}
 
-	@Test 
+	@Test  
 	public void settingDifferentTimesForShiftEnd() {
 		testShift.setShiftEndTime("03:00 AM");
 		Assert.assertEquals(LocalTime.of(3, 0), testShift.getShiftEndTime());

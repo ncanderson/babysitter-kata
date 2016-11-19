@@ -1,4 +1,4 @@
-package nate.anderson.babysitter_kata;
+package nate.anderson.babysitter_kata.model;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +12,7 @@ public class SittingShift {
 	private LocalTime shiftEndTime;
 	
 	public LocalTime getShiftStartTime() {
-		return shiftStartTime;
+		return shiftStartTime; 
 	}
 	
 	public void setShiftStartTime(String shiftStartTime) {
