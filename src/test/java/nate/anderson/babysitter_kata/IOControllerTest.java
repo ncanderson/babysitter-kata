@@ -27,7 +27,6 @@ public class IOControllerTest {
 		testShift.setShiftStartTime(ioController.handleTime(userInput));
 	}
 	
-	
 	@Test
 	public void ioControllerTakesAStringAndFormatsForShiftObject() {
 		String userInput = "05:00 PM";
@@ -54,6 +53,13 @@ public class IOControllerTest {
 		String userInput = "05:00 AM";
 		testShift.setShiftEndTime(ioController.handleTime(userInput));
 		Assert.assertNull(testShift.getShiftStartTime());
+	}
+	
+	@Test 
+	public void handleTimeChecksThatBedtimeIsWithinValidRange() {
+		String userInput = "05:00 AM";
+		testShift.setBedtime(ioController.handleTime(userInput));
+		Assert.assertNull(testShift.getBedtime());
 	}
 	
 	@Test
