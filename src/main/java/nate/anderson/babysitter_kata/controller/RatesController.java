@@ -29,4 +29,8 @@ public class RatesController {
 		return rates;
 	}
 	
+	public int calculate() {
+		return 12;
+	}
+	
 }
