@@ -11,8 +11,6 @@ import nate.anderson.babysitter_kata.model.SittingShift;
 public class SittingShiftTest {
 	
 	SittingShift testShift;
-	LocalTime testStartTime;
-	LocalTime testEndTime;
 	
 	@Before
 	public void setUp() {
@@ -28,14 +26,21 @@ public class SittingShiftTest {
 	@Test 
 	public void sittingShiftStoresEndTime() {
 		testShift.setShiftEndTime(LocalTime.of(3, 0));
-		testEndTime = LocalTime.of(3, 0);
+		LocalTime testEndTime = LocalTime.of(3, 0);
 		Assert.assertEquals(testShift.getShiftEndTime(), testEndTime);
+	}
+	
+	@Test 
+	public void sittingShiftStoresBedTime() {
+		testShift.setBedtime(LocalTime.of(22, 0));
+		LocalTime testBedtime = LocalTime.of(22, 0);
+		Assert.assertEquals(testShift.getBedtime(), testBedtime);
 	}
 	
 	@Test 
 	public void settingDifferentTimesForShiftStart() {
 		testShift.setShiftStartTime(LocalTime.of(22, 0));
-		testStartTime = LocalTime.of(22, 0);
+		LocalTime testStartTime = LocalTime.of(22, 0);
 		Assert.assertEquals(testShift.getShiftStartTime(), testStartTime);
 	}
 
@@ -50,4 +55,5 @@ public class SittingShiftTest {
 		testShift.setShiftStartTime(LocalTime.of(17, 0));
 		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
 	}
+
 }
