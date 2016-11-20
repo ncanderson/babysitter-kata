@@ -10,6 +10,7 @@ public class RatesTest {
 
 	Rates rates;
 	
+	
 	@Before
 	public void setUp() {
 		rates = new Rates();
@@ -34,5 +35,15 @@ public class RatesTest {
 	public void midnightToFinishDefaultsTo16() {
 		Assert.assertEquals(16, rates.getMidnightToFinish());
 	}
+	
+	@Test
+	public void setAllRatesCanResetAllRatesAtOnce() {
+		rates.setAllRates(10, 10, 10);
+		Assert.assertEquals(10, rates.getStartToBedtime());
+		Assert.assertEquals(10, rates.getBedtimeToMidnight());
+		Assert.assertEquals(10, rates.getMidnightToFinish());
+	}
+	
+	
 	
 }
