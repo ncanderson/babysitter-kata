@@ -10,7 +10,7 @@ public class Rates {
 	private int bedtimeToMidnight;
 	private int midnightToFinish;
 	
-	public Rates() {
+	public Rates() { 
 		allRates = new ArrayList<Integer>(3);
 		startToBedtime = 12;
 		bedtimeToMidnight = 8;

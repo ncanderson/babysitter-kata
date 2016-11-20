@@ -26,7 +26,7 @@ public class IOController {
 		else {
 			return null;
 		}
-	}
+	} 
 	
 	/**
 	 * Take a string and return a LocalTime object formatted to 24-hour time

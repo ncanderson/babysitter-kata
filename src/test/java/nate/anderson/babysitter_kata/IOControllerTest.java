@@ -62,7 +62,7 @@ public class IOControllerTest {
 		Assert.assertNull(testShift.getBedtime());
 	}
 	
-	@Test
+	@Test 
 	public void midnightIsAValidValueForStartAndFinish() {
 		String userInput = "12:00 AM";
 		testShift.setShiftStartTime(ioController.handleTime(userInput));

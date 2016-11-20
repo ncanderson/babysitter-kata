@@ -4,35 +4,33 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import nate.anderson.babysitter_kata.controller.WagesController;
+import nate.anderson.babysitter_kata.controller.RatesController;
+import nate.anderson.babysitter_kata.model.Rates;
 import nate.anderson.babysitter_kata.model.SittingShift;
 
-public class WagesControllerTest {
+public class RatesControllerTest {
 
 	SittingShift testShift;
-	WagesController testWagesController;
+	Rates testRates;
+	RatesController testWagesController;
 	
 	@Before
 	public void setUp() {
 		testShift = new SittingShift();
-		testWagesController = new WagesController(testShift);
+		testWagesController = new RatesController(testShift, testRates);
 	}
 	
 	@Test
 	public void wagesControllerTakesAShittingShift() {
 		Assert.assertEquals(testShift, testWagesController.getSittingShift());
-	}
+	} 
 	
 	@Test
-	public void testWageControllerSetterMethod() {
+	public void testRatesControllerSetterMethod() {
 		SittingShift secondTestShift = new SittingShift();
 		testWagesController.setSittingShift(secondTestShift);
 		Assert.assertEquals(secondTestShift, testWagesController.getSittingShift());
 	}
 	
-	@Test
-	public void wagesControllerHasAListOfThreeWageLevels() {
-		Assert.assertEquals(3, (testWagesController.getWageList()).size());
-	}
 }
 
