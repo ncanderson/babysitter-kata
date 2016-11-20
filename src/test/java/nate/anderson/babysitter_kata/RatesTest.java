@@ -9,7 +9,7 @@ import nate.anderson.babysitter_kata.model.Rates;
 public class RatesTest {
 
 	Rates rates;
-	
+	int rateResetTestValue = 10;
 	
 	@Before
 	public void setUp() {
@@ -44,6 +44,22 @@ public class RatesTest {
 		Assert.assertEquals(10, rates.getMidnightToFinish());
 	}
 	
+	@Test
+	public void resetStartToBedtime() {
+		rates.setStartToBedtime(rateResetTestValue);
+		Assert.assertEquals(10, rates.getStartToBedtime());
+	}
 	
+	@Test
+	public void resetBedtimeToMidnight() {
+		rates.setBedtimeToMidnight(rateResetTestValue);
+		Assert.assertEquals(10, rates.getBedtimeToMidnight());
+	}
+	
+	@Test
+	public void resetMidnightToLeave() {
+		rates.setMidnightToFinish(rateResetTestValue);
+		Assert.assertEquals(10, rates.getMidnightToFinish());
+	}
 	
 }
