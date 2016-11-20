@@ -1,6 +1,7 @@
 package nate.anderson.babysitter_kata;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,14 @@ public class IOControllerTest {
 		testShift = new SittingShift();
 		ioController = new IOController();
 	}
+	
+	@Test(expected=DateTimeParseException.class)
+	public void ioControllerHandlesImproperlyFormattedStrings() {
+		String userInput = "050:00 PM";
+		testShift.setShiftStartTime(ioController.handleTime(userInput));
+		Assert.assertEquals(LocalTime.of(17, 0), testShift.getShiftStartTime());
+	}
+	
 	
 	@Test
 	public void ioControllerTakesAStringAndFormatsForShiftObject() {
@@ -55,6 +64,18 @@ public class IOControllerTest {
 		testShift.setShiftEndTime(ioController.handleTime(userInput));
 		Assert.assertEquals(LocalTime.of(0, 0), testShift.getShiftStartTime());
 		Assert.assertEquals(LocalTime.of(0, 0), testShift.getShiftEndTime());
+	}
+	
+	@Test 
+	public void validTimesBetweenFiveAndMidnight() {
+		testShift.setShiftStartTime(ioController.handleTime("10:00 PM"));
+		Assert.assertEquals(LocalTime.of(22, 0), testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void validTimesBetweenMidnightAndFour() {
+		testShift.setShiftEndTime(ioController.handleTime("02:00 AM"));
+		Assert.assertEquals(LocalTime.of(2, 0), testShift.getShiftEndTime());
 	}
 	
 	@Test
