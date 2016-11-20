@@ -29,5 +29,10 @@ public class WagesControllerTest {
 		testWagesController.setSittingShift(secondTestShift);
 		Assert.assertEquals(secondTestShift, testWagesController.getSittingShift());
 	}
+	
+	@Test
+	public void wagesControllerHasAListOfThreeWageLevels() {
+		Assert.assertEquals(3, (testWagesController.getWageList()).size());
+	}
 }
 
