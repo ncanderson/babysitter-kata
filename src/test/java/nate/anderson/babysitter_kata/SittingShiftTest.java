@@ -38,6 +38,13 @@ public class SittingShiftTest {
 	}
 	
 	@Test 
+	public void sittingShiftStoresAnotherBedTime() {
+		testShift.setBedtime(LocalTime.of(3, 0));
+		LocalTime testBedtime = LocalTime.of(3, 0);
+		Assert.assertEquals(testShift.getBedtime(), testBedtime);
+	}
+	
+	@Test 
 	public void settingDifferentTimesForShiftStart() {
 		testShift.setShiftStartTime(LocalTime.of(22, 0));
 		LocalTime testStartTime = LocalTime.of(22, 0);
