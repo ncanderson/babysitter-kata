@@ -10,7 +10,7 @@ public class SittingShift {
 	private LocalTime shiftStartTime;
 	private LocalTime shiftEndTime;
 	private LocalTime bedtime;
-	
+	 
 	public List<LocalTime> getAllTimes() {
 		List<LocalTime> allTimes = new ArrayList<LocalTime>();
 		allTimes.add(shiftStartTime);

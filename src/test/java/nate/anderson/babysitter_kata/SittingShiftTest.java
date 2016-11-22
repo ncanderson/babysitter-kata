@@ -10,7 +10,7 @@ import nate.anderson.babysitter_kata.model.SittingShift;
 
 public class SittingShiftTest {
 	
-	SittingShift testShift;
+	SittingShift testShift; 
 	LocalTime testTime = LocalTime.of(20, 0);
 	
 	@Before
