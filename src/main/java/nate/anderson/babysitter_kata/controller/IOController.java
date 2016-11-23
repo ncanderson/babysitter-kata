@@ -8,6 +8,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import nate.anderson.babysitter_kata.model.SittingShift;
+
 
 public class IOController {
 	
@@ -32,6 +34,24 @@ public class IOController {
 		return listOfTimes;
 	}
 	
+	public void addTimeToList(LocalTime shiftTime) {
+		listOfTimes.add(shiftTime);
+	}
+	
+	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) {
+		if (timeIsValid(shiftTimes.get(0))) {
+			LocalDateTime shiftStart = LocalDateTime.of(TODAY, shiftTimes.get(0));
+			sittingShift.setShiftStartTime(shiftStart);
+		}
+		
+		if (timeIsValid(shiftTimes.get(1))) {
+			sittingShift.setBedtime(LocalDateTime.of(TODAY, LocalTime.of(22, 0)));
+		}
+		
+		if (timeIsValid(shiftTimes.get(2))) {
+			sittingShift.setShiftEndTime(LocalDateTime.of(TODAY, LocalTime.of(3, 0)));
+		}
+	}
 	
 	/**
 	 * Take String input from the user, format to LocalTime, check that time is valid
@@ -68,7 +88,7 @@ public class IOController {
 	}
 	
 	/**
-	 * Check that time falls within allowable range
+	 * Check that time falls within allowable range: 5pm and 4am
 	 * 
 	 * @param shiftTime
 	 * @return true if time is within range, false if not
