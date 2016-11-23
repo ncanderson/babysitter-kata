@@ -120,5 +120,17 @@ public class IOControllerTest {
 		LocalTime testTime = ioController.formatTime(userInput);
 		Assert.assertNull(testTime);
 	}
+	
+	@Test
+	public void ioControllerHasAListForHoldingStartAndEndTimes() {
+		Assert.assertNotNull(ioController.getListOfTimes());
+	}
+	
+//	@Test
+//	public void ioControllerChecksValidityOfAssignedTimes() {
+//		LocalTime startTime = LocalTime.of(22, 0);
+//		LocalTime badEndTime = LocalTime.of(17, 0);
+//		
+//	}
 
 }

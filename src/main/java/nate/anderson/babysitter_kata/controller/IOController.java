@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class IOController {
@@ -15,6 +17,21 @@ public class IOController {
 	private final LocalTime END_TIME = LocalTime.of(4, 0);
 	private final LocalDateTime EARLIEST_START = LocalDateTime.of(TODAY, START_TIME);
 	private final LocalDateTime LATEST_FINISH = LocalDateTime.of(TOMORROW, END_TIME);
+	
+	private List<LocalTime> listOfTimes;
+	
+	/**
+	 * IOController holds all times, checking that the selected times make logical sense before 
+	 * handing off to the sitting shift
+	 */
+	public IOController() {
+		listOfTimes = new ArrayList<LocalTime>();
+	}
+	
+	public List<LocalTime> getListOfTimes() {
+		return listOfTimes;
+	}
+	
 	
 	/**
 	 * Take String input from the user, format to LocalTime, check that time is valid
