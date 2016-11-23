@@ -20,12 +20,17 @@ public class IOControllerTest {
 	IOController ioController;
 	LocalDate today;
 	String userInput;
+	List<LocalTime> shiftTimesFromUsers;
 	
 	@Before
 	public void setUp() {
 		testShift = new SittingShift();
 		ioController = new IOController();
 		today = LocalDate.now();
+		shiftTimesFromUsers = new ArrayList<LocalTime>();
+		shiftTimesFromUsers.add(LocalTime.of(17, 0));
+		shiftTimesFromUsers.add(LocalTime.of(22, 0));
+		shiftTimesFromUsers.add(LocalTime.of(3, 0));
 	}
 	
 	@Test(expected=DateTimeParseException.class)
@@ -130,30 +135,18 @@ public class IOControllerTest {
 	
 	@Test
 	public void assignTimesChecksIncomingTimesAndHandlesSettingStart() {
-		List<LocalTime> shiftTimesFromUsers = new ArrayList<LocalTime>();
-		shiftTimesFromUsers.add(LocalTime.of(17, 0));
-		shiftTimesFromUsers.add(LocalTime.of(22, 0));
-		shiftTimesFromUsers.add(LocalTime.of(3, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(17, 0)), testShift.getShiftStartTime());
 	}
 	
 	@Test 
 	public void assignTimesChecksIncomingTimesAndHandlesSettingBedtime() {
-		List<LocalTime> shiftTimesFromUsers = new ArrayList<LocalTime>();
-		shiftTimesFromUsers.add(LocalTime.of(17, 0));
-		shiftTimesFromUsers.add(LocalTime.of(22, 0));
-		shiftTimesFromUsers.add(LocalTime.of(3, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(22, 0)), testShift.getBedtime());
 	}
 	
 	@Test
 	public void assignTimesChecksIncomingTimesAndHandlesSettingEnd() {
-		List<LocalTime> shiftTimesFromUsers = new ArrayList<LocalTime>();
-		shiftTimesFromUsers.add(LocalTime.of(17, 0));
-		shiftTimesFromUsers.add(LocalTime.of(22, 0));
-		shiftTimesFromUsers.add(LocalTime.of(3, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(3, 0)), testShift.getShiftEndTime());
 	}
