@@ -45,11 +45,13 @@ public class IOController {
 		}
 		
 		if (timeIsValid(shiftTimes.get(1))) {
-			sittingShift.setBedtime(LocalDateTime.of(TODAY, LocalTime.of(22, 0)));
+			LocalDateTime bedtime = LocalDateTime.of(TODAY, shiftTimes.get(1));
+			sittingShift.setBedtime(bedtime);
 		}
 		
 		if (timeIsValid(shiftTimes.get(2))) {
-			sittingShift.setShiftEndTime(LocalDateTime.of(TODAY, LocalTime.of(3, 0)));
+			LocalDateTime endTime = LocalDateTime.of(TODAY, shiftTimes.get(2));
+			sittingShift.setShiftEndTime(endTime);
 		}
 	}
 	

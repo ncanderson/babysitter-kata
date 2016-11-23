@@ -41,7 +41,7 @@ public class IOControllerTest {
 	
 	@Test
 	public void ioControllerTakesAStringAndFormatsForShiftObject() {
-		String userInput = "05:00 PM";
+		userInput = "05:00 PM";
 		LocalTime testTime = ioController.formatTime(userInput);
 		Assert.assertEquals(LocalTime.of(17, 0), testTime);
 	}
@@ -62,35 +62,35 @@ public class IOControllerTest {
 	
 	@Test
 	public void ioControllerHandlesLowerCaseTimeMarker() {
-		String userInput = "05:00 pm";
+		userInput = "05:00 pm";
 		LocalTime testTime = ioController.formatTime(userInput);
 		Assert.assertEquals(LocalTime.of(17, 0), testTime);
 	}
 	
 	@Test
-	public void handleTimeChecksThatEarlierTimeIsValid() {
-		String userInput = "03:00 PM";
+	public void formatTimeChecksThatEarlierTimeIsValid() {
+		userInput = "03:00 PM";
 		LocalTime testTime = ioController.formatTime(userInput);
 		Assert.assertNull(testTime);
 	}
 	
 	@Test
 	public void formatTimeChecksThatLaterTimeIsValid() {
-		String userInput = "05:00 AM";
+		userInput = "05:00 AM";
 		LocalTime testTime = ioController.formatTime(userInput);
 		Assert.assertNull(testTime);
 	}
 	
 	@Test 
 	public void formatTimeChecksThatBedtimeIsWithinValidRange() {
-		String userInput = "05:00 AM";
+		userInput = "05:00 AM";
 		LocalTime testBedtime = ioController.formatTime(userInput);
 		Assert.assertNull(testBedtime);
 	}
 	
 	@Test 
 	public void midnightIsAValidValueForStartAndFinish() {
-		String userInput = "12:00 AM";
+		userInput = "12:00 AM";
 		LocalTime start = ioController.formatTime(userInput);
 		LocalTime end = ioController.formatTime(userInput);
 		Assert.assertEquals(LocalTime.MIDNIGHT, start);
@@ -151,11 +151,66 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(3, 0)), testShift.getShiftEndTime());
 	}
 	
-//	@Test
-//	public void ioControllerChecksValidityOfAssignedTimes() {
-//		LocalTime startTime = LocalTime.of(22, 0);
-//		LocalTime badEndTime = LocalTime.of(17, 0);
-//		
+	@Test
+	public void assignTimesChecksDifferentStartTimes() {
+		shiftTimesFromUsers.add(0, LocalTime.of(22, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(22, 0)), testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void checkingAnotherStartTime() {
+		shiftTimesFromUsers.add(0, LocalTime.of(3, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(3, 0)), testShift.getShiftStartTime());
+	}
+	
+	@Test
+	public void testAnotherBedtime() {
+		shiftTimesFromUsers.add(1, LocalTime.of(17, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(17, 0)), testShift.getBedtime());
+	}
+	
+	@Test
+	public void oneMoreBedtime() {
+		shiftTimesFromUsers.add(1, LocalTime.of(4, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(4, 0)), testShift.getBedtime());
+	}
+	
+	@Test
+	public void testingAnotherEndTime() {
+		shiftTimesFromUsers.add(2, LocalTime.of(4, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(4, 0)), testShift.getShiftEndTime());
+	}
+	
+	@Test
+	public void testingAFinalEndTime() {
+		shiftTimesFromUsers.add(2, LocalTime.of(0, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(0, 0)), testShift.getShiftEndTime());
+	}
+	
+//	@Test 
+//	public void endTimeCannotBeBeforeStartTime() {
+//		shiftTimesFromUsers.add(LocalTime.of(3, 0));
+//		shiftTimesFromUsers.add(LocalTime.of(22, 0));
+//		shiftTimesFromUsers.add(LocalTime.of(17, 0));
+//		ioController.assignTimes(testShift, shiftTimesFromUsers);
+//		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(0, 0)), testShift.getShiftEndTime());
 //	}
-
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
