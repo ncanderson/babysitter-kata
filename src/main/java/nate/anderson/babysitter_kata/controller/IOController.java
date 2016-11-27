@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.activity.InvalidActivityException;
+import javax.management.InvalidAttributeValueException;
 import javax.naming.directory.InvalidAttributesException;
 
 import nate.anderson.babysitter_kata.model.SittingShift;
@@ -19,13 +20,15 @@ public class IOController {
 	
 	private final LocalDate TODAY = LocalDate.now();
 	private final LocalDate TOMORROW = TODAY.plusDays(1);
+	
 	private final LocalTime START_TIME = LocalTime.of(17, 0);
 	private final LocalTime END_TIME = LocalTime.of(4, 0);
+	
 	private final LocalDateTime EARLIEST_START = LocalDateTime.of(TODAY, START_TIME);
 	private final LocalDateTime LATEST_FINISH = LocalDateTime.of(TOMORROW, END_TIME);
 	
 	private List<LocalTime> listOfTimes;
-	
+	 
 	/**
 	 * IOController holds all times, checking that the selected times make logical sense before 
 	 * handing off to the sitting shift
@@ -58,41 +61,40 @@ public class IOController {
 	 */
 	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) throws InvalidAttributesException {
 		
-		if (timeIsValid(shiftTimes.get(0))) {
-			LocalDateTime shiftStart = LocalDateTime.of(TODAY, shiftTimes.get(0));
-			sittingShift.setShiftStartTime(shiftStart);
-		}
-		else {
+		if (shiftTimes.get(0).isBefore(shiftTimes.get(2))) {
 			throw new InvalidAttributesException();
 		}
 		
-		if (timeIsValid(shiftTimes.get(1))) {
-			if (shiftTimes.get(1).isBefore(LocalTime.MAX)) {
-				LocalDateTime bedtime = LocalDateTime.of(TODAY, shiftTimes.get(1));
-				sittingShift.setBedtime(bedtime);
+		for (LocalTime shiftTime : shiftTimes) {
+			if (!timeIsValid(shiftTime)) {
+				throw new InvalidAttributesException();
 			}
-			else {
-				LocalDateTime bedtime = LocalDateTime.of(TOMORROW, shiftTimes.get(1));
-				sittingShift.setBedtime(bedtime);
-			}
+		}
+		
+		sittingShift.setShiftStartTime(LocalDateTime.of(TODAY, shiftTimes.get(0)));
+		LocalDateTime midnight = LocalDateTime.of(TOMORROW, LocalTime.MIDNIGHT);
+
+		if (LocalDateTime.of(TODAY, shiftTimes.get(1)).isBefore(midnight)) {
 			LocalDateTime bedtime = LocalDateTime.of(TODAY, shiftTimes.get(1));
 			sittingShift.setBedtime(bedtime);
 		}
 		else {
+			LocalDateTime bedtime = LocalDateTime.of(TOMORROW, shiftTimes.get(1));
+			sittingShift.setBedtime(bedtime);
+		}
+	
+		if (LocalDateTime.of(TODAY, shiftTimes.get(2)).isAfter(sittingShift.getShiftStartTime())) {
+			sittingShift.setShiftEndTime(LocalDateTime.of(TODAY, shiftTimes.get(2)));
+		}
+		else if (LocalDateTime.of(TOMORROW, shiftTimes.get(2)).isAfter(sittingShift.getShiftStartTime())) {
+			sittingShift.setShiftEndTime(LocalDateTime.of(TOMORROW, shiftTimes.get(2)));
+		}
+		else {
 			throw new InvalidAttributesException();
 		}
 		
-		if (timeIsValid(shiftTimes.get(2))) {
-			if (shiftTimes.get(2).isAfter(LocalTime.MIDNIGHT) && (shiftTimes.get(2).isBefore(END_TIME)))  {
-				LocalDateTime endTime = LocalDateTime.of(TOMORROW, shiftTimes.get(2));
-				sittingShift.setShiftEndTime(endTime);				
-			}
-			else {
-				LocalDateTime endTime = LocalDateTime.of(TODAY, shiftTimes.get(2));
-				sittingShift.setShiftEndTime(endTime);
-			}
-		}
-		else {
+			
+		if (sittingShift.getShiftEndTime().isBefore(sittingShift.getShiftStartTime())) {
 			throw new InvalidAttributesException();
 		}
 	}

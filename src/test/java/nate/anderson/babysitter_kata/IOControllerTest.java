@@ -143,6 +143,12 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(17, 0)), testShift.getShiftStartTime());
 	}
 	
+	@Test
+	public void assingTimesSetsLocalTimeShiftStartToToday() throws InvalidAttributesException {
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+		Assert.assertEquals(LocalDateTime.of(today, shiftTimesFromUsers.get(0)), testShift.getShiftStartTime());
+	}
+	
 	@Test 
 	public void assignTimesChecksIncomingTimesAndHandlesSettingBedtime() throws InvalidAttributesException {
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
@@ -157,44 +163,44 @@ public class IOControllerTest {
 	
 	@Test
 	public void assignTimesChecksDifferentStartTimes() throws InvalidAttributesException {
-		shiftTimesFromUsers.add(0, LocalTime.of(22, 0));
+		shiftTimesFromUsers.set(0, LocalTime.of(22, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(22, 0)), testShift.getShiftStartTime());
 	}
 	
 	@Test
 	public void checkingAnotherStartTime() throws InvalidAttributesException {
-		shiftTimesFromUsers.add(0, LocalTime.of(3, 0));
+		shiftTimesFromUsers.set(0, LocalTime.of(3, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(3, 0)), testShift.getShiftStartTime());
 	}
 	
 	@Test
 	public void testAnotherBedtime() throws InvalidAttributesException { 
-		shiftTimesFromUsers.add(1, LocalTime.of(17, 0));
+		shiftTimesFromUsers.set(1, LocalTime.of(17, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(17, 0)), testShift.getBedtime());
 	}
 	
 	@Test
 	public void oneMoreBedtime() throws InvalidAttributesException {
-		shiftTimesFromUsers.add(1, LocalTime.of(4, 0));
+		shiftTimesFromUsers.set(1, LocalTime.of(4, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(4, 0)), testShift.getBedtime());
 	}
 	
 	@Test
 	public void testingAnotherEndTime() throws InvalidAttributesException { 
-		shiftTimesFromUsers.add(2, LocalTime.of(4, 0));
+		shiftTimesFromUsers.set(2, LocalTime.of(4, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
-		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(4, 0)), testShift.getShiftEndTime());
+		Assert.assertEquals(LocalDateTime.of(tomorrow, LocalTime.of(4, 0)), testShift.getShiftEndTime());
 	}
 	
 	@Test
 	public void testingAFinalEndTime() throws InvalidAttributesException {
-		shiftTimesFromUsers.add(2, LocalTime.of(0, 0));
+		shiftTimesFromUsers.set(2, LocalTime.of(0, 0));
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
-		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(0, 0)), testShift.getShiftEndTime());
+		Assert.assertEquals(LocalDateTime.of(tomorrow, LocalTime.of(0, 0)), testShift.getShiftEndTime());
 	}
 	
 	@Test
@@ -203,14 +209,15 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalDateTime.of(tomorrow, LocalTime.of(3, 0)), testShift.getShiftEndTime());
 	}
 	
-//	@Test 
-//	public void endTimeCannotBeBeforeStartTime() {
-//		shiftTimesFromUsers.add(LocalTime.of(3, 0));
-//		shiftTimesFromUsers.add(LocalTime.of(22, 0));
-//		shiftTimesFromUsers.add(LocalTime.of(17, 0));
-//		ioController.assignTimes(testShift, shiftTimesFromUsers);
-//		Assert.assertEquals(LocalDateTime.of(today, LocalTime.of(0, 0)), testShift.getShiftEndTime());
-//	}
+	@Test(expected=InvalidAttributesException.class) 
+	public void endTimeCannotBeBeforeStartTime() throws InvalidAttributesException {
+		shiftTimesFromUsers.set(0, LocalTime.of(3, 0));
+		shiftTimesFromUsers.set(1, LocalTime.of(22, 0));
+		shiftTimesFromUsers.set(2, LocalTime.of(17, 0));
+		ioController.assignTimes(testShift, shiftTimesFromUsers);
+	}
+	
+	
 	
 }
 
