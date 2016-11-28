@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import nate.anderson.babysitter_kata.model.Rates;
 import nate.anderson.babysitter_kata.model.SittingShift;
@@ -13,6 +16,8 @@ public class RatesController {
 
 	private SittingShift sittingShift;
 	private Rates rates;
+	
+	LocalDateTime midnight = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
 	
 	public RatesController(SittingShift sittingShift, Rates rates) {
 		this.sittingShift = sittingShift;
@@ -38,16 +43,23 @@ public class RatesController {
 	public List<Double> calculateTimes() {
 		List<Double> sittingTimes = new ArrayList<Double>();
 		
-		List<LocalTime> shiftTimes = sittingShift.getAllTimes();
-		List<Duration> durations = new ArrayList<Duration>();
+		sittingTimes.add(toHours(sittingShift.getShiftStartTime().until(sittingShift.getBedtime(), ChronoUnit.SECONDS)));
+		sittingTimes.add(toHours(sittingShift.getBedtime().until(midnight, ChronoUnit.SECONDS)));
+		sittingTimes.add(toHours(midnight.until(sittingShift.getShiftEndTime(), ChronoUnit.SECONDS)));
 		
-		durations.add(0, Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime()));
-		durations.add(1, Duration.between(sittingShift.getBedtime(), LocalTime.MAX));
-		durations.add(2, Duration.between(LocalTime.MIN, sittingShift.getShiftEndTime()));
 		
-		for (Duration duration: durations) {
-			sittingTimes.add(toHours(duration.getSeconds()));
-		}
+		
+//		List<LocalDateTime> shiftTimes = sittingShift.getAllTimes();
+//		List<Duration> durations = new ArrayList<Duration>();
+//		
+//		durations.add(0, Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime()));
+//		durations.add(1, Duration.between(sittingShift.getBedtime(), LocalTime.MAX));
+//		durations.add(2, Duration.between(LocalTime.MIN, sittingShift.getShiftEndTime()));
+//		
+//		for (Duration duration: durations) {
+//			sittingTimes.add(toHours(duration.getSeconds()));
+//		}
+//		
 //		if (sittingShift.getBedtime().isAfter(sittingShift.getShiftStartTime())) {
 //			durations.add(0, (Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime())));
 //		}

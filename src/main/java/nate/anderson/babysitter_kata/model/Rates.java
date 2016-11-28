@@ -6,51 +6,54 @@ import java.util.List;
 public class Rates {
 
 	private List<Integer> allRates;
-	private int startToBedtime;
-	private int bedtimeToMidnight;
-	private int midnightToFinish;
+	private int startToBedtimeRate;
+	private int bedtimeToMidnightRate;
+	private int midnightToFinishRate;
 	
 	public Rates() { 
 		allRates = new ArrayList<Integer>(3);
-		startToBedtime = 12;
-		bedtimeToMidnight = 8;
-		midnightToFinish = 16;
-		allRates.add(0, startToBedtime);
-		allRates.add(1, bedtimeToMidnight);
-		allRates.add(2, midnightToFinish);
+		startToBedtimeRate = 12;
+		bedtimeToMidnightRate = 8;
+		midnightToFinishRate = 16;
+		allRates.add(0, startToBedtimeRate);
+		allRates.add(1, bedtimeToMidnightRate);
+		allRates.add(2, midnightToFinishRate);
 	}
 	
 	public List<Integer> getAllRates() {
 		return allRates;
 	}
 	
-	public void setAllRates(int startToBedTime, int bedtimeToMidnight, int midnightToFinish) {
-		allRates.set(0, startToBedTime);
-		allRates.set(1, bedtimeToMidnight);
-		allRates.set(2, midnightToFinish);
+	public void setAllRates(int startToBedtimeRate, int bedtimeToMidnightRate, int midnightToFinishRate) {
+		allRates.set(0, startToBedtimeRate);
+		allRates.set(1, bedtimeToMidnightRate);
+		allRates.set(2, midnightToFinishRate);
 	}
 	
-	public int getStartToBedtime() {
+	public int getStartToBedtimeRate() {
 		return allRates.get(0);
 	}
 	
-	public void setStartToBedtime(int startToBedtime) {
-		allRates.set(0, startToBedtime);
+	public void setStartToBedtimeRate(int startToBedtimeRate) {
+		allRates.set(0, startToBedtimeRate);
+		this.startToBedtimeRate = startToBedtimeRate;
 	}
 	
-	public int getBedtimeToMidnight() {
+	public int getBedtimeToMidnightRate() {
 		return allRates.get(1);
 	}
 	
-	public void setBedtimeToMidnight(int bedtimeToMidnight) {
-		allRates.set(1, bedtimeToMidnight);
+	public void setBedtimeToMidnightRate(int bedtimeToMidnightRate) {
+		allRates.set(1, bedtimeToMidnightRate);
+		this.bedtimeToMidnightRate = bedtimeToMidnightRate;
 	}
 	
-	public int getMidnightToFinish() {
+	public int getMidnightToFinishRate() {
 		return allRates.get(2);
 	}
 	
-	public void setMidnightToFinish(int midnightToFinish) {
-		allRates.set(2, midnightToFinish);
+	public void setMidnightToFinishRate(int midnightToFinishRate) {
+		allRates.set(2, midnightToFinishRate);
+		this.midnightToFinishRate = midnightToFinishRate;
 	}
 }

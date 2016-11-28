@@ -61,10 +61,6 @@ public class IOController {
 	 */
 	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) throws InvalidAttributesException {
 		
-//		if (shiftTimes.get(0).isBefore(shiftTimes.get(2)) || shiftTimes.get(0).equals(shiftTimes.get(2))) {
-//			throw new InvalidAttributesException();
-//		}
-		
 		for (LocalTime shiftTime : shiftTimes) {
 			if (!timeIsValid(shiftTime)) {
 				throw new InvalidAttributesException();

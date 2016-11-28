@@ -23,43 +23,44 @@ public class RatesTest {
 	
 	@Test 
 	public void startToBedTimeDefaultsTo12() {
-		Assert.assertEquals(12, rates.getStartToBedtime());
+		Assert.assertEquals(12, rates.getStartToBedtimeRate());
 	}
 	
 	@Test
 	public void bedtimeToMidnightDefaultsTo8() {
-		Assert.assertEquals(8, rates.getBedtimeToMidnight());
+		Assert.assertEquals(8, rates.getBedtimeToMidnightRate
+				());
 	}
 	
 	@Test 
 	public void midnightToFinishDefaultsTo16() {
-		Assert.assertEquals(16, rates.getMidnightToFinish());
+		Assert.assertEquals(16, rates.getMidnightToFinishRate());
 	}
 	
 	@Test
 	public void setAllRatesCanResetAllRatesAtOnce() {
-		rates.setAllRates(10, 10, 10);
-		Assert.assertEquals(10, rates.getStartToBedtime());
-		Assert.assertEquals(10, rates.getBedtimeToMidnight());
-		Assert.assertEquals(10, rates.getMidnightToFinish());
+		rates.setAllRates(rateResetTestValue, rateResetTestValue, rateResetTestValue);
+		Assert.assertEquals(10, rates.getStartToBedtimeRate());
+		Assert.assertEquals(10, rates.getBedtimeToMidnightRate());
+		Assert.assertEquals(10, rates.getMidnightToFinishRate());
 	}
 	
 	@Test
 	public void resetStartToBedtime() {
-		rates.setStartToBedtime(rateResetTestValue);
-		Assert.assertEquals(10, rates.getStartToBedtime());
+		rates.setStartToBedtimeRate(rateResetTestValue);
+		Assert.assertEquals(10, rates.getStartToBedtimeRate());
 	}
 	
 	@Test
 	public void resetBedtimeToMidnight() {
-		rates.setBedtimeToMidnight(rateResetTestValue);
-		Assert.assertEquals(10, rates.getBedtimeToMidnight());
+		rates.setBedtimeToMidnightRate(rateResetTestValue);
+		Assert.assertEquals(10, rates.getBedtimeToMidnightRate());
 	}
 	
 	@Test
-	public void resetMidnightToLeave() {
-		rates.setMidnightToFinish(rateResetTestValue);
-		Assert.assertEquals(10, rates.getMidnightToFinish());
+	public void resetMidnightToFinish() {
+		rates.setMidnightToFinishRate(rateResetTestValue);
+		Assert.assertEquals(10, rates.getMidnightToFinishRate());
 	}
 	
 }

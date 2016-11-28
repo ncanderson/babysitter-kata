@@ -1,5 +1,7 @@
 package nate.anderson.babysitter_kata;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -18,64 +20,67 @@ public class RatesControllerTest {
 	Rates testRates;
 	RatesController testRatesController;
 	
-	LocalTime testStart = LocalTime.of(17, 0);
-	LocalTime testBedtime = LocalTime.of(22, 0);
-	LocalTime testEnd = LocalTime.of(4, 0);
+	LocalDate today = LocalDate.now();
+	LocalDate tomorrow = today.plusDays(1);
 	
-//	@Before
-//	public void setUp() {
-//		testShift = new SittingShift();
-//		testRates = new Rates();
-//		testRatesController = new RatesController(testShift, testRates);
-//	}
-//	
-//	@Test
-//	public void wagesControllerTakesAShittingShift() {
-//		Assert.assertEquals(testShift, testRatesController.getSittingShift());
-//	} 
-//	
-//	@Test
-//	public void testRatesControllerSetterMethod() {
-//		SittingShift secondTestShift = new SittingShift();
-//		testRatesController.setSittingShift(secondTestShift);
-//		Assert.assertEquals(secondTestShift, testRatesController.getSittingShift());
-//	}
-//	
-//	@Test 
-//	public void ratesControllerCalculatesTimeFromStartToBedtime() {
-//		testShift.setAllTimes(testStart, testBedtime, testEnd);
-//		List<Double> testTimes = testRatesController.calculateTimes();
-//		Assert.assertEquals(5.0, testTimes.get(0), .05);
-//	}
+	LocalDateTime testStart = LocalDateTime.of(today, LocalTime.of(17, 0));
+	LocalDateTime testBedtime = LocalDateTime.of(today, LocalTime.of(22, 0));
+	LocalDateTime testEnd = LocalDateTime.of(tomorrow, LocalTime.of(4, 0));
 	
-//	@Test 
-//	public void ratesControllerCalculatesTimeFromBedtimeToMidnight() {
-//		testShift.setAllTimes(testStart, testBedtime, testEnd);
-//		List<Double> testTimes = testRatesController.calculateTimes();
-//		Assert.assertEquals(2.0, testTimes.get(1), .05);
-//	}
-//	
-//	@Test 
-//	public void ratesControllerCalculatesTimeFromMidnightToEnd() {
-//		testShift.setAllTimes(testStart, testBedtime, testEnd);
-//		List<Double> testTimes = testRatesController.calculateTimes();
-//		Assert.assertEquals(4.0, testTimes.get(2), .05);
-//	}
-//	
-//	@Test
-//	public void ratesControllerCanHandleDifferentTimes() {
-//		testShift.setAllTimes(LocalTime.of(22, 0), LocalTime.of(23, 0), LocalTime.of(2, 0));
-//		List<Double> testTimes = testRatesController.calculateTimes();
-//		Assert.assertEquals(testTimes.get(0), 1.0, .05);
-//		Assert.assertEquals(testTimes.get(1), 1.0, .05);
-//		Assert.assertEquals(testTimes.get(2), 2.0, .05);
-//	}
-//	
-//	@Test
-//	public void ratesControllerCanParseVariousSittingShiftTimesIntoAList() {
-//		
-//	}
-//	
+	
+	
+	@Before
+	public void setUp() {
+		testShift = new SittingShift();
+		testRates = new Rates();
+		testRatesController = new RatesController(testShift, testRates);
+	}
+	
+	@Test
+	public void wagesControllerTakesAShittingShift() {
+		Assert.assertEquals(testShift, testRatesController.getSittingShift());
+	} 
+	
+	@Test
+	public void testRatesControllerSetterMethod() {
+		SittingShift secondTestShift = new SittingShift();
+		testRatesController.setSittingShift(secondTestShift);
+		Assert.assertEquals(secondTestShift, testRatesController.getSittingShift());
+	}
+	
+	@Test 
+	public void ratesControllerCalculatesTimeFromStartToBedtime() {
+		testShift.setAllTimes(testStart, testBedtime, testEnd);
+		List<Double> testTimes = testRatesController.calculateTimes();
+		Assert.assertEquals(5.0, testTimes.get(0), .05);
+	}
+	
+	@Test 
+	public void ratesControllerCalculatesTimeFromBedtimeToMidnight() {
+		testShift.setAllTimes(testStart, testBedtime, testEnd);
+		List<Double> testTimes = testRatesController.calculateTimes();
+		Assert.assertEquals(2.0, testTimes.get(1), .05);
+	}
+	
+	@Test 
+	public void ratesControllerCalculatesTimeFromMidnightToEnd() {
+		testShift.setAllTimes(testStart, testBedtime, testEnd);
+		List<Double> testTimes = testRatesController.calculateTimes();
+		Assert.assertEquals(4.0, testTimes.get(2), .05);
+	}
+	
+	@Test
+	public void ratesControllerCanHandleDifferentTimes() {
+		LocalDateTime newStart = LocalDateTime.of(today, LocalTime.of(22, 0));
+		LocalDateTime newBedtime = LocalDateTime.of(today, LocalTime.of(23, 0));
+		LocalDateTime newEnd = LocalDateTime.of(tomorrow, LocalTime.of(2, 0));
+		testShift.setAllTimes(newStart, newBedtime, newEnd);
+		List<Double> testTimes = testRatesController.calculateTimes();
+		Assert.assertEquals(1.0, testTimes.get(0), .05);
+		Assert.assertEquals(1.0, testTimes.get(1), .05);
+		Assert.assertEquals(2.0, testTimes.get(2), .05);
+	}
+	
 //	@Test
 //	public void oneHourPreBedtimeCosts12() {
 //		SittingShift twelveDollarShift = new SittingShift();
@@ -85,7 +90,7 @@ public class RatesControllerTest {
 //		testRatesController.setSittingShift(twelveDollarShift);
 //		Assert.assertEquals(12, testRatesController.calculate());
 //	}
-	
+//	
 //	@Test 
 //	public void oneHourPostBedtimeCosts8() {
 //		SittingShift eightDollarShift = new SittingShift();
@@ -95,7 +100,7 @@ public class RatesControllerTest {
 //		testRatesController.setSittingShift(eightDollarShift);
 //		Assert.assertEquals(8, testRatesController.calculate());
 //	}
-	 
+//	 
 //	@Test 
 //	public void oneHourPostMidnightCost16() {
 //		SittingShift sixteenDollarShift = new SittingShift();
@@ -105,12 +110,12 @@ public class RatesControllerTest {
 //		testRatesController.setSittingShift(sixteenDollarShift);
 //		Assert.assertEquals(16, testRatesController.calculate());
 //	}
-	
+//	
 //	@Test
 //	public void toHoursConvertsLongSecondsToIntegerHours() {
 //		Double hours = testRatesController.toHours(3600);
 //		Assert.assertEquals(1.0, hours, .05);
 //	}
-	
+//	
 }
 
