@@ -61,9 +61,9 @@ public class IOController {
 	 */
 	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) throws InvalidAttributesException {
 		
-		if (shiftTimes.get(0).isBefore(shiftTimes.get(2))) {
-			throw new InvalidAttributesException();
-		}
+//		if (shiftTimes.get(0).isBefore(shiftTimes.get(2)) || shiftTimes.get(0).equals(shiftTimes.get(2))) {
+//			throw new InvalidAttributesException();
+//		}
 		
 		for (LocalTime shiftTime : shiftTimes) {
 			if (!timeIsValid(shiftTime)) {
@@ -71,22 +71,24 @@ public class IOController {
 			}
 		}
 		
-		sittingShift.setShiftStartTime(LocalDateTime.of(TODAY, shiftTimes.get(0)));
-		LocalDateTime midnight = LocalDateTime.of(TOMORROW, LocalTime.MIDNIGHT);
-
-		if (LocalDateTime.of(TODAY, shiftTimes.get(1)).isBefore(midnight)) {
-			LocalDateTime bedtime = LocalDateTime.of(TODAY, shiftTimes.get(1));
-			sittingShift.setBedtime(bedtime);
+		if (shiftTimes.get(0).isBefore(END_TIME)) {
+			sittingShift.setShiftStartTime(LocalDateTime.of(TOMORROW, shiftTimes.get(0)));
 		}
 		else {
-			LocalDateTime bedtime = LocalDateTime.of(TOMORROW, shiftTimes.get(1));
-			sittingShift.setBedtime(bedtime);
+			sittingShift.setShiftStartTime(LocalDateTime.of(TODAY, shiftTimes.get(0)));			
 		}
-	
-		if (LocalDateTime.of(TODAY, shiftTimes.get(2)).isAfter(sittingShift.getShiftStartTime())) {
+		
+		if (shiftTimes.get(1).isAfter(LocalTime.NOON)) {
+			sittingShift.setBedtime(LocalDateTime.of(TODAY, shiftTimes.get(1)));
+		}
+		else {
+			sittingShift.setBedtime(LocalDateTime.of(TOMORROW, shiftTimes.get(1)));
+		}
+		
+		if (shiftTimes.get(2).isAfter(LocalTime.NOON)) {
 			sittingShift.setShiftEndTime(LocalDateTime.of(TODAY, shiftTimes.get(2)));
 		}
-		else if (LocalDateTime.of(TOMORROW, shiftTimes.get(2)).isAfter(sittingShift.getShiftStartTime())) {
+		else if (shiftTimes.get(2).isBefore(LocalTime.NOON)) {
 			sittingShift.setShiftEndTime(LocalDateTime.of(TOMORROW, shiftTimes.get(2)));
 		}
 		else {
@@ -95,6 +97,10 @@ public class IOController {
 		
 			
 		if (sittingShift.getShiftEndTime().isBefore(sittingShift.getShiftStartTime())) {
+			throw new InvalidAttributesException();
+		}
+		
+		if (sittingShift.getShiftStartTime().equals(sittingShift.getShiftEndTime())) {
 			throw new InvalidAttributesException();
 		}
 	}
