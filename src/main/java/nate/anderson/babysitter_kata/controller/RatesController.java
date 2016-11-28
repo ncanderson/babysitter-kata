@@ -41,55 +41,31 @@ public class RatesController {
 	}
 	
 	public List<Double> calculateTimes() {
-		List<Double> sittingTimes = new ArrayList<Double>();
+		List<Double> sittingTimesInHours = new ArrayList<Double>();
 		
-		sittingTimes.add(toHours(sittingShift.getShiftStartTime().until(sittingShift.getBedtime(), ChronoUnit.SECONDS)));
-		sittingTimes.add(toHours(sittingShift.getBedtime().until(midnight, ChronoUnit.SECONDS)));
-		sittingTimes.add(toHours(midnight.until(sittingShift.getShiftEndTime(), ChronoUnit.SECONDS)));
-		
-		
-		
-//		List<LocalDateTime> shiftTimes = sittingShift.getAllTimes();
-//		List<Duration> durations = new ArrayList<Duration>();
-//		
-//		durations.add(0, Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime()));
-//		durations.add(1, Duration.between(sittingShift.getBedtime(), LocalTime.MAX));
-//		durations.add(2, Duration.between(LocalTime.MIN, sittingShift.getShiftEndTime()));
-//		
-//		for (Duration duration: durations) {
-//			sittingTimes.add(toHours(duration.getSeconds()));
-//		}
-//		
-//		if (sittingShift.getBedtime().isAfter(sittingShift.getShiftStartTime())) {
-//			durations.add(0, (Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime())));
-//		}
-//		else {
-//			durations.add(1, (Duration.between(sittingShift.getShiftStartTime(), sittingShift.getShiftEndTime())));
-//		}
-//		sittingTimes.add(5);
-//		sittingTimes.add(2);
-//		sittingTimes.add(4);
-//		
-		return sittingTimes;
-	}
-	
-	public int calculate() {
-		List<Integer> shiftRates = rates.getAllRates();
-		int totalCost = 0;
-		
-		List<Duration> durations = new ArrayList<Duration>();
-		
-		if (sittingShift.getBedtime().isAfter(sittingShift.getShiftStartTime())) {
-			durations.add(0, (Duration.between(sittingShift.getShiftStartTime(), sittingShift.getBedtime())));
+		sittingTimesInHours.add(toHours(sittingShift.getShiftStartTime().until(sittingShift.getBedtime(), ChronoUnit.SECONDS)));
+		if (sittingShift.getShiftEndTime().isBefore(midnight)) {
+			sittingTimesInHours.add(toHours(sittingShift.getBedtime().until(sittingShift.getShiftEndTime(), ChronoUnit.SECONDS)));
 		}
 		else {
-			durations.add(1, (Duration.between(sittingShift.getShiftStartTime(), sittingShift.getShiftEndTime())));
+			sittingTimesInHours.add(toHours(sittingShift.getBedtime().until(midnight, ChronoUnit.SECONDS)));			
 		}
+		sittingTimesInHours.add(toHours(midnight.until(sittingShift.getShiftEndTime(), ChronoUnit.SECONDS)));
+		
+		return sittingTimesInHours;
+	}
+	
+	public int calculateCost() {
+		List<Integer> shiftRates = rates.getAllRates();
+		List<Double> durations = calculateTimes();
+		int totalCost = 0;
 		
 		for (int i = 0; i < durations.size(); i++) {
-			totalCost += ((durations.get(i)).toHours() * shiftRates.get(i)); 
+			if (durations.get(i) > 0) {
+				totalCost += ((durations.get(i)) * shiftRates.get(i));
+			}
 		}
-		
+
 		return totalCost;
 	}
 	

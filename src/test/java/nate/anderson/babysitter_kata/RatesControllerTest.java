@@ -81,26 +81,26 @@ public class RatesControllerTest {
 		Assert.assertEquals(2.0, testTimes.get(2), .05);
 	}
 	
-//	@Test
-//	public void oneHourPreBedtimeCosts12() {
-//		SittingShift twelveDollarShift = new SittingShift();
-//		twelveDollarShift.setShiftStartTime(LocalTime.of(17, 0));
-//		twelveDollarShift.setBedtime(LocalTime.of(18, 0));
-//		twelveDollarShift.setShiftEndTime(LocalTime.of(18, 0));
-//		testRatesController.setSittingShift(twelveDollarShift);
-//		Assert.assertEquals(12, testRatesController.calculate());
-//	}
-//	
-//	@Test 
-//	public void oneHourPostBedtimeCosts8() {
-//		SittingShift eightDollarShift = new SittingShift();
-//		eightDollarShift.setShiftStartTime(LocalTime.of(18, 0));
-//		eightDollarShift.setBedtime(LocalTime.of(17, 0));
-//		eightDollarShift.setShiftEndTime(LocalTime.of(19, 0));
-//		testRatesController.setSittingShift(eightDollarShift);
-//		Assert.assertEquals(8, testRatesController.calculate());
-//	}
-//	 
+	@Test
+	public void oneHourPreBedtimeCosts12() {
+		SittingShift twelveDollarShift = new SittingShift();
+		twelveDollarShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		twelveDollarShift.setBedtime(LocalDateTime.of(today, LocalTime.of(18, 0)));
+		twelveDollarShift.setShiftEndTime(LocalDateTime.of(today, LocalTime.of(18, 0)));
+		testRatesController.setSittingShift(twelveDollarShift);
+		Assert.assertEquals(12, testRatesController.calculateCost());
+	}
+	
+	@Test 
+	public void oneHourPostBedtimeCosts8() {
+		SittingShift eightDollarShift = new SittingShift();
+		eightDollarShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		eightDollarShift.setBedtime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		eightDollarShift.setShiftEndTime(LocalDateTime.of(today, LocalTime.of(18, 0)));
+		testRatesController.setSittingShift(eightDollarShift);
+		Assert.assertEquals(8, testRatesController.calculateCost());
+	}
+	 
 //	@Test 
 //	public void oneHourPostMidnightCost16() {
 //		SittingShift sixteenDollarShift = new SittingShift();
