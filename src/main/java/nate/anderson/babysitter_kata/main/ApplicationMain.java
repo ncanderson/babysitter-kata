@@ -36,51 +36,65 @@ public class ApplicationMain {
 			String input = null;
 			ioController.getListOfTimes().clear();
 			
-			System.out.println("Please enter shift start time: ");
-			try {
-				input = scanner.nextLine();
-				formattedTime = ioController.formatTime(input);
-				ioController.addTimeToList(formattedTime);
-			}
-			catch (DateTimeParseException e) {
-				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
-			}
-			
-			System.out.println("Please enter bedtime: ");
-			try {
-				input = scanner.nextLine();
-				formattedTime = ioController.formatTime(input);
-				ioController.addTimeToList(formattedTime);
-			}
-			catch (DateTimeParseException e) {
-				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+			while (true) {
+				System.out.println("Please enter shift start time: ");
+				try {
+					input = scanner.nextLine();
+					formattedTime = ioController.formatTime(input);
+					ioController.addTimeToList(formattedTime);
+					break;
+				}
+				catch (DateTimeParseException e) {
+					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+				}
+				catch (IllegalArgumentException e) {
+					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+				}
 			}
 			
-			System.out.println("Please enter shift end time: ");
-			try {
-				input = scanner.nextLine();
-				formattedTime = ioController.formatTime(input);
-				ioController.addTimeToList(formattedTime);
-			}
-			catch (DateTimeParseException e) {
-				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
-			}
-		
-			try {
-				ioController.assignTimes(sittingShift, ioController.getListOfTimes());
-				ratesController = new RatesController(sittingShift, rates);
-				break;
-			} 
-			catch (InvalidAttributesException e) {
-				System.out.println("One or more times are invalid, please try again");
+			while (true) {
+				System.out.println("Please enter bedtime: ");
+				try {
+					input = scanner.nextLine();
+					formattedTime = ioController.formatTime(input);
+					ioController.addTimeToList(formattedTime);
+					break;
+				}
+				catch (DateTimeParseException e) {
+					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+				}
+				catch (IllegalArgumentException e) {
+					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+				}
 			}
 			
+			while (true) {
+				System.out.println("Please enter shift end time: ");
+				try {
+					input = scanner.nextLine();
+					formattedTime = ioController.formatTime(input);
+					ioController.addTimeToList(formattedTime);
+					ioController.assignTimes(sittingShift, ioController.getListOfTimes());
+					ratesController = new RatesController(sittingShift, rates);
+					break;
+				}
+				catch (DateTimeParseException e) {
+					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+				}
+				catch (IllegalArgumentException e) {
+					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+				}
+				catch (InvalidAttributesException e) {
+					System.out.println("End time cannot be after start time, please try again");
+				}
+			}
+			break;
 		}
 		
 		System.out.println();
 		System.out.println("=======================");
 		System.out.println("Total for the night is:");
-		System.out.println("$ " + ratesController.calculateCost());
+		System.out.println("$" + ratesController.calculateCost());
 		
 	}
 

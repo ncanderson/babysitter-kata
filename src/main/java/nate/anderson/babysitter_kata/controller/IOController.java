@@ -1,6 +1,5 @@
 package nate.anderson.babysitter_kata.controller;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -8,9 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.activity.InvalidActivityException;
-import javax.management.InvalidAttributeValueException;
 import javax.naming.directory.InvalidAttributesException;
 
 import nate.anderson.babysitter_kata.model.SittingShift;
@@ -18,6 +14,9 @@ import nate.anderson.babysitter_kata.model.SittingShift;
 
 public class IOController {
 	
+	/**
+	 * Final variables to check user inputs against
+	 */
 	private final LocalDate TODAY = LocalDate.now();
 	private final LocalDate TOMORROW = TODAY.plusDays(1);
 	
@@ -109,15 +108,18 @@ public class IOController {
 	 * @param userInput
 	 * @return LocalTime, formatted for the model
 	 */
-	public LocalTime formatTime(String userInput) throws DateTimeParseException {
+	public LocalTime formatTime(String userInput) throws DateTimeParseException, IllegalArgumentException {
 		LocalTime formattedTime = twentyFourHourConverter(userInput.toUpperCase());
 		
-		if (timeIsValid(formattedTime)) {
-			return formattedTime;			
+		try {
+			if (timeIsValid(formattedTime)) {
+				return formattedTime;
+			}
 		}
-		else {
-			return null;
+		catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException();
 		}
+		return null;
 	} 
 	
 	/**
@@ -132,6 +134,7 @@ public class IOController {
 		
 		LocalTime twelveHourTime = LocalTime.parse(shiftTime, shiftTime12HourFormat);
 		LocalTime formattedTime = LocalTime.parse(shiftTime24HourFormat.format(twelveHourTime));
+		
 		return formattedTime;
 	}
 	
@@ -152,7 +155,7 @@ public class IOController {
 			return true;
 		}
 		else {
-			return false;
+			throw new IllegalArgumentException();
 		}
 	}
 }

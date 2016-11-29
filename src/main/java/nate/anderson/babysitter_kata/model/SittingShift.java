@@ -1,17 +1,24 @@
 package nate.anderson.babysitter_kata.model;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
  
 public class SittingShift { 
 	
+	/**
+	 * Three variables for the times in the shift. The other, midnight, is implicit and 
+	 * its presence handled by the iocontroller
+	 */
 	private LocalDateTime shiftStartTime;
 	private LocalDateTime shiftEndTime;
 	private LocalDateTime bedtime;
 	 
+	/**
+	 * Get all instance variables in list format
+	 * 
+	 * @return all variables added in the appropriate order for the iocontroller
+	 */
 	public List<LocalDateTime> getAllTimes() {
 		List<LocalDateTime> allTimes = new ArrayList<LocalDateTime>();
 		allTimes.add(shiftStartTime);
@@ -20,12 +27,22 @@ public class SittingShift {
 		return allTimes;
 	}
 	
+	/** 
+	 * Set all shift times at once
+	 * 
+	 * @param shiftStartTime
+	 * @param bedtime
+	 * @param shiftEndTime
+	 */
 	public void setAllTimes(LocalDateTime shiftStartTime, LocalDateTime bedtime, LocalDateTime shiftEndTime) {
 		this.shiftStartTime = shiftStartTime;
 		this.bedtime = bedtime;
 		this.shiftEndTime = shiftEndTime;
 	}
 	
+	/**
+	 * Getters and setters for invididual times
+	 */
 	public LocalDateTime getShiftStartTime() {
 		return shiftStartTime; 
 	}

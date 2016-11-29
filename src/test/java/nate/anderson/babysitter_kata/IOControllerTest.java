@@ -50,18 +50,16 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalTime.of(17, 0), testTime);
 	}
 	
-	@Test
-	public void formatTimeReturnsNullIfTimeIsTooEarly() {
+	@Test(expected=IllegalArgumentException.class)
+	public void formatTimeThrowsExceptionIfTimeIsTooEarly() {
 		userInput = "03:00 PM";
 		LocalTime testTime = ioController.formatTime(userInput);
-		Assert.assertNull(testTime);
 	}
 	
-	@Test
-	public void formatTimeReturnsNullIfTimeIsTooLate() {
+	@Test(expected=IllegalArgumentException.class)
+	public void formatTimeThrowsExceptionIfTimeIsTooLate() {
 		userInput = "06:00 AM";
 		LocalTime testTime = ioController.formatTime(userInput);
-		Assert.assertNull(testTime);
 	}
 	
 	@Test
@@ -71,25 +69,22 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalTime.of(17, 0), testTime);
 	}
 	
-	@Test
-	public void formatTimeChecksThatEarlierTimeIsValid() {
+	@Test(expected=IllegalArgumentException.class)
+	public void formatTimeThrowsExceptionEarlierTimeIsValid() {
 		userInput = "03:00 PM";
 		LocalTime testTime = ioController.formatTime(userInput);
-		Assert.assertNull(testTime);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void formatTimeChecksThatLaterTimeIsValid() {
 		userInput = "05:00 AM";
 		LocalTime testTime = ioController.formatTime(userInput);
-		Assert.assertNull(testTime);
 	}
 	
-	@Test 
+	@Test(expected=IllegalArgumentException.class)
 	public void formatTimeChecksThatBedtimeIsWithinValidRange() {
 		userInput = "05:00 AM";
 		LocalTime testBedtime = ioController.formatTime(userInput);
-		Assert.assertNull(testBedtime);
 	}
 	
 	@Test 
@@ -125,11 +120,10 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalTime.of(4, 0), testTime);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void noonIsInvalidForAnything() {
 		String userInput = "12:00 PM";
 		LocalTime testTime = ioController.formatTime(userInput);
-		Assert.assertNull(testTime);
 	}
 	
 	@Test

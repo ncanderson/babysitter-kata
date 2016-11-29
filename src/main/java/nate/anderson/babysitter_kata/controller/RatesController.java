@@ -2,7 +2,6 @@ package nate.anderson.babysitter_kata.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,17 +12,31 @@ import nate.anderson.babysitter_kata.model.SittingShift;
 
 public class RatesController {
 
+	/**
+	 * Takes a sitting shift and current rates to calculate cost
+	 */
 	private SittingShift sittingShift;
 	private Rates rates;
 	ChronoUnit seconds = ChronoUnit.SECONDS;
 	
+	/**
+	 * Rates and times are calculated 'from today' with midnight falling on tomorrow
+	 */
 	LocalDateTime midnight = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
 	
+	/**
+	 * Takes a shift and rates
+	 * @param sittingShift times will have been set with iocontroller
+	 * @param rates are brought in with default values
+	 */
 	public RatesController(SittingShift sittingShift, Rates rates) {
 		this.sittingShift = sittingShift;
 		this.rates = rates;
 	}
 
+	/**
+	 * Getters and setters 
+	 */
 	public void setSittingShift(SittingShift sittingShift) {
 		this.sittingShift = sittingShift;
 	}
@@ -94,6 +107,11 @@ public class RatesController {
 		return sittingTimesInHours;
 	}
 	
+	/**
+	 * Calculates cost of the night from the times held in the sitting shift 
+	 * 
+	 * @return totalCost for shift
+	 */
 	public int calculateCost() {
 		List<Integer> shiftRates = rates.getAllRates();
 		List<Double> durations = calculateBillableTimes();
@@ -105,10 +123,16 @@ public class RatesController {
 				totalCost += (modifiedHours * shiftRates.get(i));
 			}
 		}
-
 		return totalCost;
 	}
 	
+	/**
+	 * Takes seconds between two shift times and converts to hours
+	 * Maintains partial hours, which are rounded (if necessary) in calculateCost()
+	 *  
+	 * @param seconds between shift times
+	 * @return those seconds as an
+	 */
 	public Double toHours(long seconds) {
 		double hours = Double.valueOf(seconds / 3600.0); 
 		return hours;
