@@ -33,7 +33,15 @@ public class RatesControllerTest {
 	public void setUp() {
 		testShift = new SittingShift();
 		testRates = new Rates();
+		testShift.setAllTimes(testStart, testBedtime, testEnd);
 		testRatesController = new RatesController(testShift, testRates);
+	}
+	
+	@Test
+	public void testGettersAndSettersForRatesObject() {
+		Rates secondTestRates = new Rates();
+		testRatesController.setRates(secondTestRates);
+		Assert.assertEquals(secondTestRates, testRatesController.getRates());
 	}
 	
 	@Test
@@ -50,22 +58,19 @@ public class RatesControllerTest {
 	
 	@Test 
 	public void ratesControllerCalculatesTimeFromStartToBedtime() {
-		testShift.setAllTimes(testStart, testBedtime, testEnd);
-		List<Double> testTimes = testRatesController.calculateTimes();
+		List<Double> testTimes = testRatesController.calculateBillableTimes();
 		Assert.assertEquals(5.0, testTimes.get(0), .05);
 	}
 	
 	@Test 
 	public void ratesControllerCalculatesTimeFromBedtimeToMidnight() {
-		testShift.setAllTimes(testStart, testBedtime, testEnd);
-		List<Double> testTimes = testRatesController.calculateTimes();
+		List<Double> testTimes = testRatesController.calculateBillableTimes();
 		Assert.assertEquals(2.0, testTimes.get(1), .05);
 	}
 	
 	@Test 
 	public void ratesControllerCalculatesTimeFromMidnightToEnd() {
-		testShift.setAllTimes(testStart, testBedtime, testEnd);
-		List<Double> testTimes = testRatesController.calculateTimes();
+		List<Double> testTimes = testRatesController.calculateBillableTimes();
 		Assert.assertEquals(4.0, testTimes.get(2), .05);
 	}
 	
@@ -75,7 +80,7 @@ public class RatesControllerTest {
 		LocalDateTime newBedtime = LocalDateTime.of(today, LocalTime.of(23, 0));
 		LocalDateTime newEnd = LocalDateTime.of(tomorrow, LocalTime.of(2, 0));
 		testShift.setAllTimes(newStart, newBedtime, newEnd);
-		List<Double> testTimes = testRatesController.calculateTimes();
+		List<Double> testTimes = testRatesController.calculateBillableTimes();
 		Assert.assertEquals(1.0, testTimes.get(0), .05);
 		Assert.assertEquals(1.0, testTimes.get(1), .05);
 		Assert.assertEquals(2.0, testTimes.get(2), .05);
@@ -88,7 +93,23 @@ public class RatesControllerTest {
 		twelveDollarShift.setBedtime(LocalDateTime.of(today, LocalTime.of(18, 0)));
 		twelveDollarShift.setShiftEndTime(LocalDateTime.of(today, LocalTime.of(18, 0)));
 		testRatesController.setSittingShift(twelveDollarShift);
-		Assert.assertEquals(12, testRatesController.calculateCost());
+		Assert.assertEquals(12.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void allDifferentWagesBeforeMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(18, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(today, LocalTime.of(19, 0)));
+		Assert.assertEquals(20.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void allDifferentWagesAfterMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(tomorrow, LocalTime.of(0, 0)));
+		testShift.setBedtime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(2, 0)));
+		Assert.assertEquals(32.0, testRatesController.calculateCost(), .05);
 	}
 	
 	@Test 
@@ -101,21 +122,68 @@ public class RatesControllerTest {
 		Assert.assertEquals(8, testRatesController.calculateCost());
 	}
 	 
-//	@Test 
-//	public void oneHourPostMidnightCost16() {
-//		SittingShift sixteenDollarShift = new SittingShift();
-//		sixteenDollarShift.setShiftStartTime(LocalTime.of(0, 0));
-//		sixteenDollarShift.setBedtime(LocalTime.of(17, 0));
-//		sixteenDollarShift.setShiftEndTime(LocalTime.of(1, 0));
-//		testRatesController.setSittingShift(sixteenDollarShift);
-//		Assert.assertEquals(16, testRatesController.calculate());
-//	}
-//	
-//	@Test
-//	public void toHoursConvertsLongSecondsToIntegerHours() {
-//		Double hours = testRatesController.toHours(3600);
-//		Assert.assertEquals(1.0, hours, .05);
-//	}
-//	
+	@Test 
+	public void oneHourPostMidnightCost16() {
+		SittingShift sixteenDollarShift = new SittingShift();
+		sixteenDollarShift.setShiftStartTime(LocalDateTime.of(tomorrow, LocalTime.of(0, 0)));
+		sixteenDollarShift.setBedtime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		sixteenDollarShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		testRatesController.setSittingShift(sixteenDollarShift);
+		Assert.assertEquals(16, testRatesController.calculateCost());
+	}
+	
+	@Test 
+	public void fourHoursPostBedTimeEndingAtMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(20, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(0, 0)));
+		Assert.assertEquals(32.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void endAfterMidnightBedtimeBefore() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(22, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(23, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(2, 0)));
+		Assert.assertEquals(52.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void oneHourOfEachTimeSlot() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(22, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(23, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		Assert.assertEquals(36.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void startBeforeMidnightBedTimeAfterMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(22, 0)));
+		testShift.setBedtime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(2, 0)));
+		Assert.assertEquals(56.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void bedtimeIsBeforeStartOfShiftWhichIsBeforeMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(23, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(16, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(1, 0)));
+		Assert.assertEquals(24.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void bedtimeIsBeforeStartOfShiftWhichIsAfterMidnight() {
+		testShift.setShiftStartTime(LocalDateTime.of(tomorrow, LocalTime.of(0, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(17, 0)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(2, 0)));
+		Assert.assertEquals(32.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
+	public void toHoursConvertsLongSecondsToIntegerHours() {
+		Double hours = testRatesController.toHours(3600);
+		Assert.assertEquals(1.0, hours, .05);
+	}	
 }
 
