@@ -247,6 +247,14 @@ public class RatesControllerTest {
 	}
 	
 	@Test
+	public void fractionalHoursInEachWageLevelAreRoundedToOneHour() {
+		testShift.setShiftStartTime(LocalDateTime.of(today, LocalTime.of(23, 0)));
+		testShift.setBedtime(LocalDateTime.of(today, LocalTime.of(23, 30)));
+		testShift.setShiftEndTime(LocalDateTime.of(tomorrow, LocalTime.of(0, 30)));
+		Assert.assertEquals(36.0, testRatesController.calculateCost(), .05);
+	}
+	
+	@Test
 	public void toHoursConvertsLongSecondsToIntegerHours() {
 		Double hours = testRatesController.toHours(3600);
 		Assert.assertEquals(1.0, hours, .05);
