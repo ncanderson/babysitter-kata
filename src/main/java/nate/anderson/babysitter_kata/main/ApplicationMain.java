@@ -32,8 +32,9 @@ public class ApplicationMain {
 		
 		while (true) {
 			
-			LocalTime formattedTime;
-			String input;
+			LocalTime formattedTime = null;
+			String input = null;
+			ioController.getListOfTimes().clear();
 			
 			System.out.println("Please enter shift start time: ");
 			try {
@@ -43,7 +44,6 @@ public class ApplicationMain {
 			}
 			catch (DateTimeParseException e) {
 				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
-				e.printStackTrace();
 			}
 			
 			System.out.println("Please enter bedtime: ");
@@ -54,7 +54,6 @@ public class ApplicationMain {
 			}
 			catch (DateTimeParseException e) {
 				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
-				e.printStackTrace();
 			}
 			
 			System.out.println("Please enter shift end time: ");
@@ -65,9 +64,7 @@ public class ApplicationMain {
 			}
 			catch (DateTimeParseException e) {
 				System.out.println("Please enter a time in the format 'HH:mm am/pm'");
-				e.printStackTrace();
 			}
-		
 		
 			try {
 				ioController.assignTimes(sittingShift, ioController.getListOfTimes());
@@ -76,12 +73,14 @@ public class ApplicationMain {
 			} 
 			catch (InvalidAttributesException e) {
 				System.out.println("One or more times are invalid, please try again");
-				e.printStackTrace();
 			}
 			
 		}
 		
-		System.out.println(ratesController.calculateCost());
+		System.out.println();
+		System.out.println("=======================");
+		System.out.println("Total for the night is:");
+		System.out.println("$ " + ratesController.calculateCost());
 		
 	}
 

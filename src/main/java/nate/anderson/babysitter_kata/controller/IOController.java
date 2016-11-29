@@ -62,7 +62,7 @@ public class IOController {
 	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) throws InvalidAttributesException {
 		
 		for (LocalTime shiftTime : shiftTimes) {
-			if (!timeIsValid(shiftTime)) {
+			if (shiftTime == null) {
 				throw new InvalidAttributesException();
 			}
 		}

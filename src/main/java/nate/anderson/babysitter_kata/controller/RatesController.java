@@ -50,9 +50,16 @@ public class RatesController {
 		Double startToBed = toHours(start.until(bed, seconds));
 		Double bedToMidnight = toHours(bed.until(midnight, seconds));
 		Double afterMidnight = toHours(midnight.until(end, seconds));
+		Double startToEnd = toHours(start.until(end, seconds));
 		
 		if (end.isBefore(midnight) || end.equals(midnight)) {
-			sittingTimesInHours.add(startToBed);
+			if (bed.isAfter(end)) {
+				sittingTimesInHours.add(startToEnd);
+			}
+			else {
+				sittingTimesInHours.add(startToBed);				
+			}
+			
 			if (start.isAfter(bed)) {
 				sittingTimesInHours.add(toHours(start.until(end, seconds)));
 			}
@@ -76,7 +83,12 @@ public class RatesController {
 				sittingTimesInHours.add(toHours(start.until(midnight, seconds)));
 				sittingTimesInHours.add(0.0);
 			}
-			sittingTimesInHours.add(afterMidnight);
+			if (start.isAfter(midnight)) {
+				sittingTimesInHours.add(toHours(start.until(end, seconds)));
+			}
+			else {
+				sittingTimesInHours.add(afterMidnight);
+			}
 		}
 		
 		return sittingTimesInHours;
@@ -89,7 +101,8 @@ public class RatesController {
 		
 		for (int i = 0; i < durations.size(); i++) {
 			if (durations.get(i) > 0) {
-				totalCost += (durations.get(i) * shiftRates.get(i));
+				Double modifiedHours = Math.ceil(durations.get(i));
+				totalCost += (modifiedHours * shiftRates.get(i));
 			}
 		}
 
@@ -97,6 +110,7 @@ public class RatesController {
 	}
 	
 	public Double toHours(long seconds) {
-		return Double.valueOf(seconds / 3600);
+		double hours = Double.valueOf(seconds / 3600.0); 
+		return hours;
 	}
 }
