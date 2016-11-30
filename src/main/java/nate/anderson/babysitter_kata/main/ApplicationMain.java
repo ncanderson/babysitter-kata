@@ -60,6 +60,7 @@ public class ApplicationMain {
 			}
 			
 			while (true) {
+				System.out.println("-----");
 				System.out.println("Please enter bedtime: ");
 				input = scanner.nextLine();
 				try {
@@ -78,6 +79,7 @@ public class ApplicationMain {
 			}
 			
 			while (true) {
+				System.out.println("-----");
 				System.out.println("Please enter shift end time: ");
 				input = scanner.nextLine();
 				try {
