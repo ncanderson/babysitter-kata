@@ -51,9 +51,11 @@ public class ApplicationMain {
 				}
 				catch (DateTimeParseException e) {
 					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+					System.out.println("-----");
 				}
 				catch (IllegalArgumentException e) {
 					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+					System.out.println("-----");
 				}
 			}
 			
@@ -67,9 +69,11 @@ public class ApplicationMain {
 				}
 				catch (DateTimeParseException e) {
 					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+					System.out.println("-----");
 				}
 				catch (IllegalArgumentException e) {
 					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+					System.out.println("-----");
 				}
 			}
 			
@@ -84,12 +88,15 @@ public class ApplicationMain {
 				}
 				catch (DateTimeParseException e) {
 					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
+					System.out.println("-----");
 				}
 				catch (IllegalArgumentException e) {
 					System.out.println("Time must be between 5:00 PM and 4:00 AM");
+					System.out.println("-----");
 				}
 				catch (InvalidAttributesException e) {
 					System.out.println("End time cannot be before start time, please try again");
+					System.out.println("-----");
 					ioController.clearAtIndex(2);
 				}
 			}
