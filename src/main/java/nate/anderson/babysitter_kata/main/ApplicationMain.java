@@ -30,6 +30,7 @@ public class ApplicationMain {
 		sittingShift = new SittingShift();
 		ioController = new IOController();
 		
+		System.out.println();
 		System.out.println("Babysitting shift calculator");
 		System.out.println("============================");
 		System.out.println();
@@ -99,6 +100,7 @@ public class ApplicationMain {
 		System.out.println("=======================");
 		System.out.println("Total for the night is:");
 		System.out.println("$" + ratesController.calculateCost());
+		System.out.println();
 		
 	}
 
