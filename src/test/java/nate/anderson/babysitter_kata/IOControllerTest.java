@@ -225,4 +225,33 @@ public class IOControllerTest {
 		ioController.assignTimes(testShift, shiftTimesFromUsers);
 	}
 	
+	@Test 
+	public void clearAtIndexSetsIndexZeroToNull() {
+		ioController.addTimeToList(LocalTime.of(17, 0));
+		ioController.addTimeToList(LocalTime.of(18, 0));
+		ioController.addTimeToList(LocalTime.of(19, 0));
+		ioController.clearAtIndex(0);
+		LocalTime shouldBeNull = ioController.getListOfTimes().get(0);
+		Assert.assertNull(shouldBeNull);
+	}
+	
+	@Test 
+	public void clearAtIndexSetsIndexOneToNull() {
+		ioController.addTimeToList(LocalTime.of(17, 0));
+		ioController.addTimeToList(LocalTime.of(18, 0));
+		ioController.addTimeToList(LocalTime.of(19, 0));
+		ioController.clearAtIndex(1);
+		LocalTime shouldBeNull = ioController.getListOfTimes().get(1);
+		Assert.assertNull(shouldBeNull);
+	}
+	
+	@Test 
+	public void clearAtIndexSetsIndexTwoToNull() {
+		ioController.addTimeToList(LocalTime.of(17, 0));
+		ioController.addTimeToList(LocalTime.of(18, 0));
+		ioController.addTimeToList(LocalTime.of(19, 0));
+		ioController.clearAtIndex(2);
+		LocalTime shouldBeNull = ioController.getListOfTimes().get(2);
+		Assert.assertNull(shouldBeNull);
+	}
 }

@@ -45,6 +45,13 @@ public class IOController {
 	}
 	
 	/**
+	 * Clears from temporary list in case of bad input
+	 */
+	public void clearAtIndex(int index) {
+		listOfTimes.remove(index);
+	}
+	
+	/**
 	 * This method will take times from userinput and hold them before analyzing for validity
 	 * 
 	 * @param shiftTime

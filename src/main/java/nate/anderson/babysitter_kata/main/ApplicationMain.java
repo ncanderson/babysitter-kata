@@ -80,6 +80,7 @@ public class ApplicationMain {
 					formattedTime = ioController.formatTime(input);
 					ioController.addTimeToList(formattedTime);
 					ioController.assignTimes(sittingShift, ioController.getListOfTimes());
+					break;
 				}
 				catch (DateTimeParseException e) {
 					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
@@ -89,12 +90,13 @@ public class ApplicationMain {
 				}
 				catch (InvalidAttributesException e) {
 					System.out.println("End time cannot be before start time, please try again");
+					ioController.clearAtIndex(2);
 				}
-				ratesController = new RatesController(sittingShift, rates);
-				break;
 			}
 			break;
 		}
+		
+		ratesController = new RatesController(sittingShift, rates);
 		
 		System.out.println();
 		System.out.println("=======================");
