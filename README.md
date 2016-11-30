@@ -11,7 +11,7 @@ git clone https://github.com/ncanderson/babysitter-kata
 
 ### To run:
 ```
-cd babysitter_kata/dist
+cd babysitter-kata/dist
 java -jar nate-anderson-babysitter-kata.jar 
 ```
 
