@@ -6,22 +6,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 import nate.anderson.babysitter_kata.model.Rates;
 import nate.anderson.babysitter_kata.model.SittingShift;
 
 public class RatesController {
-
-	/**
-	 * Takes a sitting shift and current rates to calculate cost
-	 */
+	
+	// Takes a sitting shift and current rates to calculate cost
 	private SittingShift sittingShift;
 	private Rates rates;
-	ChronoUnit seconds = ChronoUnit.SECONDS;
+	TemporalUnit seconds = ChronoUnit.SECONDS;
 	
-	/**
-	 * Rates and times are calculated 'from today' with midnight falling on tomorrow
-	 */
+	// Rates and times are calculated from today with midnight falling on tomorrow
 	LocalDateTime midnight = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0));
 	
 	/**
@@ -53,60 +50,6 @@ public class RatesController {
 		return rates;
 	}
 	
-	public List<Double> calculateBillableTimes() {
-		List<Double> sittingTimesInHours = new ArrayList<Double>();
-		
-		LocalDateTime start = sittingShift.getShiftStartTime();
-		LocalDateTime bed = sittingShift.getBedtime();
-		LocalDateTime end = sittingShift.getShiftEndTime();
-		
-		Double startToBed = toHours(start.until(bed, seconds));
-		Double bedToMidnight = toHours(bed.until(midnight, seconds));
-		Double afterMidnight = toHours(midnight.until(end, seconds));
-		Double startToEnd = toHours(start.until(end, seconds));
-		
-		if (end.isBefore(midnight) || end.equals(midnight)) {
-			if (bed.isAfter(end)) {
-				sittingTimesInHours.add(startToEnd);
-			}
-			else {
-				sittingTimesInHours.add(startToBed);				
-			}
-			
-			if (start.isAfter(bed)) {
-				sittingTimesInHours.add(toHours(start.until(end, seconds)));
-			}
-			else {
-				sittingTimesInHours.add(toHours(bed.until(end, seconds)));				
-			}
-			sittingTimesInHours.add(0.0);
-		}
-		else {
-			if (bed.isBefore(midnight)) {
-				if (bed.isBefore(start)) {
-					sittingTimesInHours.add(0.0);
-					sittingTimesInHours.add(toHours(start.until(midnight, seconds)));
-				}
-				else {
-					sittingTimesInHours.add(startToBed);
-					sittingTimesInHours.add(bedToMidnight);					
-				}
-			}
-			else {
-				sittingTimesInHours.add(toHours(start.until(midnight, seconds)));
-				sittingTimesInHours.add(0.0);
-			}
-			if (start.isAfter(midnight)) {
-				sittingTimesInHours.add(toHours(start.until(end, seconds)));
-			}
-			else {
-				sittingTimesInHours.add(afterMidnight);
-			}
-		}
-		
-		return sittingTimesInHours;
-	}
-	
 	/**
 	 * Calculates cost of the night from the times held in the sitting shift 
 	 * 
@@ -124,6 +67,70 @@ public class RatesController {
 			}
 		}
 		return totalCost;
+	}
+	
+	/** 
+	 * Calculates the hours between each of the three (or four for midnight) important times in the sitting shift
+	 * Does not round up here, leave that to calculate cost method
+	 * 
+	 * @return a list of hours
+	 */
+	public List<Double> calculateBillableTimes() {
+		List<Double> sittingTimesInHours = new ArrayList<Double>();
+		
+		LocalDateTime start = sittingShift.getShiftStartTime();
+		LocalDateTime bed = sittingShift.getBedtime();
+		LocalDateTime end = sittingShift.getShiftEndTime();
+		
+		Double startToBed = toHours(start.until(bed, seconds));
+		Double startToMidnight = toHours(start.until(midnight, seconds));
+		Double startToEnd = toHours(start.until(end, seconds));
+		Double bedToMidnight = toHours(bed.until(midnight, seconds));
+		Double bedToEnd = toHours(bed.until(end, seconds));
+		Double afterMidnight = toHours(midnight.until(end, seconds));
+		Double noTime = 0.0;
+		
+		if (end.isBefore(midnight) || end.equals(midnight)) {
+			if (bed.isAfter(end)) {
+				sittingTimesInHours.add(startToEnd);
+			}
+			else {
+				sittingTimesInHours.add(startToBed);				
+			}
+			
+			if (start.isAfter(bed)) {
+				sittingTimesInHours.add(startToEnd);
+			}
+			else {
+				sittingTimesInHours.add(bedToEnd);				
+			}
+			sittingTimesInHours.add(noTime);
+		}
+		else {
+			if (bed.isBefore(midnight)) {
+				if (bed.isBefore(start)) {
+					sittingTimesInHours.add(noTime);
+					sittingTimesInHours.add(startToMidnight);
+				}
+				else {
+					sittingTimesInHours.add(startToBed);
+					sittingTimesInHours.add(bedToMidnight);					
+				}
+			}
+			else {
+				sittingTimesInHours.add(startToMidnight);
+				sittingTimesInHours.add(noTime);
+			}
+			 
+			if (start.isAfter(midnight)) {
+				sittingTimesInHours.add(startToEnd);
+			}
+			else {
+				sittingTimesInHours.add(afterMidnight);
+			}
+		}
+		
+		return sittingTimesInHours;
 	}
 	
 	/**

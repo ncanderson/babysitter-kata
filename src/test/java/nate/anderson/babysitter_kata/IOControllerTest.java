@@ -120,6 +120,12 @@ public class IOControllerTest {
 		Assert.assertEquals(LocalTime.of(4, 0), testTime);
 	}
 	
+	@Test 
+	public void formatTimeAddsZeroForSingleDigitHour() {
+		LocalTime testTime = ioController.formatTime("5:00 PM");
+		Assert.assertEquals(LocalTime.of(17, 0), testTime);
+	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void noonIsInvalidForAnything() {
 		String userInput = "12:00 PM";

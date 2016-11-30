@@ -21,6 +21,7 @@ public class IOController {
 	private final LocalDate TOMORROW = TODAY.plusDays(1);
 	
 	private final LocalTime START_TIME = LocalTime.of(17, 0);
+	private final LocalTime NOON = LocalTime.NOON;
 	private final LocalTime END_TIME = LocalTime.of(4, 0);
 	
 	private final LocalDateTime EARLIEST_START = LocalDateTime.of(TODAY, START_TIME);
@@ -59,43 +60,42 @@ public class IOController {
 	 * @param shiftTimes
 	 */
 	public void assignTimes(SittingShift sittingShift, List<LocalTime> shiftTimes) throws InvalidAttributesException {
+
+		sittingShift.setShiftStartTime(turnLocalTimeIntoLocalDateTime(shiftTimes.get(0)));
+		sittingShift.setBedtime(turnLocalTimeIntoLocalDateTime(shiftTimes.get(1)));
+		sittingShift.setShiftEndTime(turnLocalTimeIntoLocalDateTime(shiftTimes.get(2)));
+
+		checkEndTimeIsAfterStart(sittingShift);
+	}
+	
+	/**
+	 * Check LocalTime in relation to NOON, which determines which day the time in question will fall ong
+	 * 
+	 * @param shiftTime to add Date to 
+	 * @return the appropriate LocalDateTime
+	 */
+	private LocalDateTime turnLocalTimeIntoLocalDateTime(LocalTime shiftTime) {
 		
-		for (LocalTime shiftTime : shiftTimes) {
-			if (shiftTime == null) {
-				throw new InvalidAttributesException();
-			}
-		}
-		
-		if (shiftTimes.get(0).isBefore(END_TIME)) {
-			sittingShift.setShiftStartTime(LocalDateTime.of(TOMORROW, shiftTimes.get(0)));
+		if (shiftTime.isAfter(NOON)) {
+			return (LocalDateTime.of(TODAY, shiftTime));			
 		}
 		else {
-			sittingShift.setShiftStartTime(LocalDateTime.of(TODAY, shiftTimes.get(0)));			
+			return(LocalDateTime.of(TOMORROW, shiftTime));
 		}
+	}
+	
+	/**
+	 * Check times assigned to the Sitting Shift to ensure end is after start
+	 * 
+	 * @param sittingShift to check
+	 * @throws InvalidAttributesException if end is before or equal to start
+	 */
+	private void checkEndTimeIsAfterStart(SittingShift sittingShift) throws InvalidAttributesException {
 		
-		if (shiftTimes.get(1).isAfter(LocalTime.NOON)) {
-			sittingShift.setBedtime(LocalDateTime.of(TODAY, shiftTimes.get(1)));
-		}
-		else {
-			sittingShift.setBedtime(LocalDateTime.of(TOMORROW, shiftTimes.get(1)));
-		}
+		LocalDateTime start = sittingShift.getShiftStartTime();
+		LocalDateTime end = sittingShift.getShiftEndTime();
 		
-		if (shiftTimes.get(2).isAfter(LocalTime.NOON)) {
-			sittingShift.setShiftEndTime(LocalDateTime.of(TODAY, shiftTimes.get(2)));
-		}
-		else if (shiftTimes.get(2).isBefore(LocalTime.NOON)) {
-			sittingShift.setShiftEndTime(LocalDateTime.of(TOMORROW, shiftTimes.get(2)));
-		}
-		else {
-			throw new InvalidAttributesException();
-		}
-		
-			
-		if (sittingShift.getShiftEndTime().isBefore(sittingShift.getShiftStartTime())) {
-			throw new InvalidAttributesException();
-		}
-		
-		if (sittingShift.getShiftStartTime().equals(sittingShift.getShiftEndTime())) {
+		if (start.isAfter(end) || start.equals(end)) {
 			throw new InvalidAttributesException();
 		}
 	}
@@ -109,7 +109,22 @@ public class IOController {
 	 * @return LocalTime, formatted for the model
 	 */
 	public LocalTime formatTime(String userInput) throws DateTimeParseException, IllegalArgumentException {
+		
+		userInput = addMissingZeroAtIndexZero(userInput);
+		
 		LocalTime formattedTime = twentyFourHourConverter(userInput.toUpperCase());
+		
+		return checkTimeIsWithinLimits(formattedTime);
+	} 
+	
+	/**
+	 * Goes between timeIsValid and format time, passing the IllegalArgumentException up the stack
+	 * 
+	 * @param formattedTime to check
+	 * @return the same if valid
+	 * @throws IllegalArgumentException if not valid
+	 */
+	private LocalTime checkTimeIsWithinLimits(LocalTime formattedTime) throws IllegalArgumentException {
 		
 		try {
 			if (timeIsValid(formattedTime)) {
@@ -120,7 +135,21 @@ public class IOController {
 			throw new IllegalArgumentException();
 		}
 		return null;
-	} 
+	}
+	
+	/**
+	 * Checks user input length and adds a zero if missing - required for the DateTimeFormatter 
+	 * 
+	 * @param userInput
+	 * @return the input string with a leading zero added, if required
+	 */
+	private String addMissingZeroAtIndexZero(String userInput) {
+		
+		if (userInput.length() == 7) {
+			userInput = "0" + userInput;
+		}
+		return userInput;
+	}
 	
 	/**
 	 * Take a string and return a LocalTime object formatted to 24-hour time
@@ -129,13 +158,13 @@ public class IOController {
 	 * @return shiftTime string formatted to 24-hour LocalTime object
 	 */
 	private LocalTime twentyFourHourConverter(String shiftTime) {
+		
 		DateTimeFormatter shiftTime12HourFormat = DateTimeFormatter.ofPattern("hh:mm a");
 		DateTimeFormatter shiftTime24HourFormat = DateTimeFormatter.ofPattern("HH:mm");
 		
 		LocalTime twelveHourTime = LocalTime.parse(shiftTime, shiftTime12HourFormat);
-		LocalTime formattedTime = LocalTime.parse(shiftTime24HourFormat.format(twelveHourTime));
 		
-		return formattedTime;
+		return LocalTime.parse(shiftTime24HourFormat.format(twelveHourTime));
 	}
 	
 	/**
@@ -145,6 +174,7 @@ public class IOController {
 	 * @return true if time is within range, false if not
 	 */
 	private boolean timeIsValid(LocalTime shiftTime) {
+		
 		if (shiftTime.equals(EARLIEST_START.toLocalTime()) || shiftTime.equals(LATEST_FINISH.toLocalTime()) || shiftTime.equals(LocalTime.MIDNIGHT)) {
 			return true;
 		}

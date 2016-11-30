@@ -30,6 +30,10 @@ public class ApplicationMain {
 		sittingShift = new SittingShift();
 		ioController = new IOController();
 		
+		System.out.println("Babysitting shift calculator");
+		System.out.println("============================");
+		System.out.println();
+		
 		while (true) {
 			
 			LocalTime formattedTime = null;
@@ -38,8 +42,8 @@ public class ApplicationMain {
 			
 			while (true) {
 				System.out.println("Please enter shift start time: ");
+				input = scanner.nextLine();
 				try {
-					input = scanner.nextLine();
 					formattedTime = ioController.formatTime(input);
 					ioController.addTimeToList(formattedTime);
 					break;
@@ -54,8 +58,8 @@ public class ApplicationMain {
 			
 			while (true) {
 				System.out.println("Please enter bedtime: ");
+				input = scanner.nextLine();
 				try {
-					input = scanner.nextLine();
 					formattedTime = ioController.formatTime(input);
 					ioController.addTimeToList(formattedTime);
 					break;
@@ -70,13 +74,11 @@ public class ApplicationMain {
 			
 			while (true) {
 				System.out.println("Please enter shift end time: ");
+				input = scanner.nextLine();
 				try {
-					input = scanner.nextLine();
 					formattedTime = ioController.formatTime(input);
 					ioController.addTimeToList(formattedTime);
 					ioController.assignTimes(sittingShift, ioController.getListOfTimes());
-					ratesController = new RatesController(sittingShift, rates);
-					break;
 				}
 				catch (DateTimeParseException e) {
 					System.out.println("Please enter a time in the format 'HH:mm am/pm'");
@@ -85,8 +87,10 @@ public class ApplicationMain {
 					System.out.println("Time must be between 5:00 PM and 4:00 AM");
 				}
 				catch (InvalidAttributesException e) {
-					System.out.println("End time cannot be after start time, please try again");
+					System.out.println("End time cannot be before start time, please try again");
 				}
+				ratesController = new RatesController(sittingShift, rates);
+				break;
 			}
 			break;
 		}
