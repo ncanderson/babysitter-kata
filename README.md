@@ -6,13 +6,13 @@ Coded in Java 8, requires no additional dependencies, although due to the use of
 
 ### To clone the whole repository:
 ```
-$ git clone https://github.com/ncanderson/babysitter_kata
+git clone https://github.com/ncanderson/babysitter-kata
 ```
 
 ### To run:
 ```
-$ cd babysitter_kata/dist
-$ java -jar nate-anderson-babysitter-kata.jar 
+cd babysitter_kata/dist
+java -jar nate-anderson-babysitter-kata.jar 
 ```
 
 The program will guide you through the rest!
