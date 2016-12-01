@@ -4,12 +4,12 @@ Challenge from [this github repository](https://gist.github.com/jameskbride/5482
 
 Coded in Java 8, requires no additional dependencies, although due to the use of the LocalDateTime class, this project is not compatible with earlier versions of java.
 
-### To clone the whole repository:
+### To clone the repository:
 ```
 git clone https://github.com/ncanderson/babysitter-kata
 ```
 
-### To run:
+### To run, execute the following:
 ```
 cd babysitter-kata/dist
 java -jar nate-anderson-babysitter-kata.jar 

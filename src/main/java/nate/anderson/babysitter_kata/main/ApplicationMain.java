@@ -111,8 +111,6 @@ public class ApplicationMain {
 		System.out.println("=======================");
 		System.out.println("Total for the night is:");
 		System.out.println("$" + ratesController.calculateCost());
-		System.out.println();
-		
+		System.out.println();	
 	}
-
 }
